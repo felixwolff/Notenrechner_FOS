@@ -1,96 +1,120 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<title>Notenrechner – Abschlussnote</title>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ihr Notennavigator zur Abschlussnote Mathematik</title>
+
 <style>
     body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        max-width: 500px;
+        font-family: Arial, Helvetica, sans-serif;
+        max-width: 750px;
         margin: auto;
+        padding: 20px;
+        font-size: 17px;
+        line-height: 1.7;
+        color: #111;
     }
-    h1 {
-        text-align: center;
+    h1 { text-align: center; font-size: 26px; margin-bottom: 20px; }
+    h2 { font-size: 20px; margin-bottom: 10px; }
+
+    a { color: #1a73e8; font-weight: bold; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .box {
+        padding: 18px;
+        border-radius: 10px;
+        margin-top: 22px;
     }
-    .container {
-        margin-bottom: 25px;
+
+    .warning {
+        background: #fff3cd;
+        border-left: 6px solid #ffca2c;
     }
-    input[type=range] {
-        width: 100%;
+    .intro {
+        background: #e7f0fd;
+        border-left: 6px solid #4285f4;
     }
-    .value {
-        font-weight: bold;
-        color: #1a73e8;
+    .reflect {
+        background: #e9f6ec;
+        border-left: 6px solid #34a853;
     }
-    .result {
-        background: #f1f3f4;
-        padding: 15px;
-        border-radius: 8px;
-        font-size: 1.3em;
-        text-align: center;
-        margin-top: 20px;
+    .info {
+        background: #f3e8fd;
+        border-left: 6px solid #a142f4;
+    }
+
+    @media (max-width:480px) {
+        body { padding: 14px; }
+        h1 { font-size: 22px; }
     }
 </style>
 </head>
+
 <body>
 
-<h1>Notenrechner</h1>
-<p>Gib für jedes Halbjahr die Notenpunkte (0–15) ein. Die abschließende Note berechnet sich im Verhältnis 1:1 aus dem Durchschnitt der Halbjahresnoten und der Abschlussprüfung.</p>
+<h1>Ihr NotenNavigator zur Abschlussnote Mathematik</h1>
 
-<div class="container">
-    <label>11. Klasse – 1. Halbjahr: <span class="value" id="v1">0</span></label>
-    <input type="range" min="0" max="15" value="0" id="n1">
+<!-- Hinweis -->
+<div class="box warning">
+    <h2>⚠️ Wichtiger Hinweis</h2>
+    <p>
+        Diese Website dient <strong>ausschließlich zur Orientierung</strong>.
+        Es wird <strong>keine Gewähr</strong> für die Richtigkeit oder Vollständigkeit der Inhalte übernommen.
+        Für verbindliche und rechtssichere Auskünfte wenden Sie sich bitte an Ihre <strong>Abteilungsleitung</strong>.
+    </p>
+    <p>
+        Alle Informationen basieren auf der
+        <strong>Ausbildungs- und Prüfungsverordnung der Fachoberschule (APO-FOS)</strong>:<br>
+        <a href="https://gesetze.berlin.de/bsbe/document/jlr-FOSchulAPrVBErahmen" target="_blank" rel="noopener">
+            → zur offiziellen Gesetzesseite
+        </a>
+    </p>
 </div>
 
-<div class="container">
-    <label>11. Klasse – 2. Halbjahr: <span class="value" id="v2">0</span></label>
-    <input type="range" min="0" max="15" value="0" id="n2">
+<!-- Intro -->
+<div class="box intro">
+    <p>
+        Diese Seite richtet sich an Schülerinnen und Schüler der <strong>Fachoberschule (FOS)</strong>.
+        Hier können Sie nachvollziehen, <strong>wie sich Ihre Endnote im schriftlichen Prüfungsfach Mathematik</strong>
+        (oder einem anderen schriftlichen Prüfungsfach) ergibt.
+    </p>
+
+    <p>
+        ➡️ <a href="schriftlich_berechnen.html">Zum Rechner für die Endnote</a>
+    </p>
 </div>
 
-<div class="container">
-    <label>12. Klasse – 1. Halbjahr: <span class="value" id="v3">0</span></label>
-    <input type="range" min="0" max="15" value="0" id="n3">
+<!-- Reflexion -->
+<div class="box reflect">
+    <h2>🌱 Ein Werkzeug zum Nachdenken über Ihre Ziele</h2>
+
+    <p>Diese Website soll Ihnen auch helfen, über Ihre eigene Situation nachzudenken:</p>
+
+    <ul>
+        <li><strong>Reichen meine bisherigen Anstrengungen aus, um mein Ziel in Mathematik zu erreichen?</strong></li>
+        <li><strong>Muss ich meine Lernstrategie oder Einsatzbereitschaft anpassen?</strong></li>
+        <li><strong>Oder sollte ich mein gesetztes Ziel überdenken, sodass es realistischer erreichbar ist?</strong></li>
+    </ul>
 </div>
 
-<div class="container">
-    <label>12. Klasse – 2. Halbjahr: <span class="value" id="v4">0</span></label>
-    <input type="range" min="0" max="15" value="0" id="n4">
+<!-- Weniger als 5 Punkte -->
+<div class="box info">
+    <h2>❓ Was passiert bei weniger als 5 Punkten in der schriftlichen Abschlussprüfung?</h2>
+
+    <p>Hier erfahren Sie:</p>
+
+    <ul>
+        <li>warum eine schriftliche Leistung unter 5 Punkten <strong>nicht automatisch</strong> zum Nichtbestehen führt,</li>
+        <li>wie die <strong>Halbjahresnoten</strong> die Endnote beeinflussen,</li>
+        <li>wann ein <strong>Ausgleich</strong> möglich ist,</li>
+        <li>und in welchen Fällen eine <strong>mündliche Zusatzprüfung</strong> helfen kann.</li>
+    </ul>
+
+    <p>
+        ➡️ <a href="weniger_als_5_punkte.html">Mehr erfahren</a>
+    </p>
 </div>
-
-<div class="container">
-    <label>Abschlussprüfung: <span class="value" id="v5">0</span></label>
-    <input type="range" min="0" max="15" value="0" id="n5">
-</div>
-
-<div class="result" id="result">Abschließende Note: 0.0</div>
-
-<script>
-function update() {
-    let n1 = Number(document.getElementById("n1").value);
-    let n2 = Number(document.getElementById("n2").value);
-    let n3 = Number(document.getElementById("n3").value);
-    let n4 = Number(document.getElementById("n4").value);
-    let n5 = Number(document.getElementById("n5").value);
-
-    document.getElementById("v1").innerText = n1;
-    document.getElementById("v2").innerText = n2;
-    document.getElementById("v3").innerText = n3;
-    document.getElementById("v4").innerText = n4;
-    document.getElementById("v5").innerText = n5;
-
-    let hj = (n1 + n2 + n3 + n4) / 4;
-    let endnote = (hj + n5) / 2;
-
-    document.getElementById("result").innerText =
-        "Abschließende Note: " + endnote.toFixed(1);
-}
-
-document.querySelectorAll("input").forEach(el => {
-    el.addEventListener("input", update);
-});
-</script>
 
 </body>
 </html>

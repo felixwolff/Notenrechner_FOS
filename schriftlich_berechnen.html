@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Endnote in Mathematik (oder anderem schriftlichen Prüfungsfach) berechnen</title>
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        max-width: 750px;
+        margin: auto;
+        padding: 20px;
+        font-size: 17px;
+        line-height: 1.7;
+        color: #111;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 26px;
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        font-size: 20px;
+        margin-top: 25px;
+    }
+
+    a {
+        color: #1a73e8;
+        font-weight: bold;
+    }
+    a:hover { text-decoration: underline; }
+
+    .box {
+        padding: 18px;
+        border-radius: 10px;
+        margin-top: 22px;
+    }
+
+    .calcbox {
+        background: #e9f6ec;
+        border-left: 6px solid #34a853;
+    }
+
+    .resultbox {
+        background: #e7f0fd;
+        border-left: 6px solid #4285f4;
+        padding: 20px;
+        border-radius: 10px;
+        font-size: 1.4em;
+        text-align: center;
+        margin-top: 25px;
+        font-weight: bold;
+        color: #0a3d91;
+    }
+
+    .warning {
+        background: #fff3cd;
+        border-left: 6px solid #ffca2c;
+        padding: 16px;
+        border-radius: 10px;
+        margin-top: 30px;
+    }
+
+    .value {
+        font-weight: bold;
+        color: #1a73e8;
+    }
+
+    input[type=range] { width: 100%; }
+
+    @media (max-width:480px) {
+        body { padding: 14px; }
+        h1 { font-size: 22px; }
+    }
+</style>
+</head>
+
+<body>
+
+<a href="index.html">← Zurück zur Hauptseite</a>
+
+<h1>Endnote im Fach Mathematik<br>(oder einem anderem schriftlichen Prüfungsfach)</h1>
+
+<p>
+Diese Seite berechnet Ihre voraussichtliche Endnote im schriftlichen Prüfungsfach.
+Die Endnote ergibt sich aus dem Durchschnitt Ihrer vier Halbjahresnoten (H) und der schriftlichen Prüfung (S).
+</p>
+
+<p><strong>Formel:</strong> P = (H + S) / 2 → anschließend auf ganze Punkte runden.</p>
+
+<p style="margin-top: 25px;">
+    Bitte geben Sie über die Bewegung der Regler die <strong>bisher erreichten</strong> oder 
+    <strong>voraussichtlich zu erwartenden Notenpunkte</strong> in den Halbjahresnoten 
+    und in der schriftlichen Prüfung ein.
+</p>
+
+
+
+<div class="box calcbox">
+<h2>Halbjahresnoten (Notenpunkte) </h2>
+
+    <div class="container">
+        <label>11. Klasse – 1. Halbjahr: <span id="v1" class="value">0</span></label>
+        <input type="range" min="0" max="15" step="1" value="0" id="n1">
+    </div>
+
+    <div class="container">
+        <label>11. Klasse – 2. Halbjahr: <span id="v2" class="value">0</span></label>
+        <input type="range" min="0" max="15" step="1" value="0" id="n2">
+    </div>
+
+    <div class="container">
+        <label>12. Klasse – 1. Halbjahr: <span id="v3" class="value">0</span></label>
+        <input type="range" min="0" max="15" step="1" value="0" id="n3">
+    </div>
+
+    <div class="container">
+        <label>12. Klasse – 2. Halbjahr: <span id="v4" class="value">0</span></label>
+        <input type="range" min="0" max="15" step="1" value="0" id="n4">
+    </div>
+
+    <h2>Schriftliche Prüfung (Notenpunkte)</h2>
+    <div class="container">
+        <label>Schriftliche Prüfung: <span id="v5" class="value">0</span></label>
+        <input type="range" min="0" max="15" step="1" value="0" id="n5">
+    </div>
+
+</div>
+
+<div id="result" class="resultbox">Endnote: 0 Punkte</div>
+
+<!-- Hinweis + neuer Link -->
+<p style="font-size: 0.9em; color: #444; text-align: center; margin-top: 6px;">
+    Ab <strong>5 Notenpunkten</strong> gilt das Fach als bestanden.
+</p>
+
+<p style="font-size: 0.9em; text-align: center; margin-top: 4px;">
+    <a href="weniger_als_5_punkte.html">Was passiert, wenn ich weniger als 5 Punkte erreiche?</a>
+</p>
+
+<!-- Hinweis -->
+<div class="box warning">
+    <h2>⚠️ Wichtiger Hinweis</h2>
+    <p>
+        Diese Website dient <strong>ausschließlich zur Orientierung</strong>.
+        Es wird <strong>keine Gewähr</strong> für die Richtigkeit oder Vollständigkeit der Inhalte übernommen.
+        Für verbindliche und rechtssichere Auskünfte wenden Sie sich bitte an Ihre <strong>Abteilungsleitung</strong>.
+    </p>
+    <p>
+        Alle Informationen basieren auf der
+        <strong>Ausbildungs- und Prüfungsverordnung der Fachoberschule (APO-FOS)</strong>:<br>
+        <a href="https://gesetze.berlin.de/bsbe/document/jlr-FOSchulAPrVBErahmen" target="_blank" rel="noopener">
+            → zur offiziellen Gesetzesseite
+        </a>
+    </p>
+</div>
+
+<script>
+function roundToWhole(x) {
+    return (x - Math.floor(x) < 0.5) ? Math.floor(x) : Math.ceil(x);
+}
+
+function update() {
+    let a = +n1.value, b = +n2.value, c = +n3.value, d = +n4.value, s = +n5.value;
+
+    v1.textContent = a;
+    v2.textContent = b;
+    v3.textContent = c;
+    v4.textContent = d;
+    v5.textContent = s;
+
+    let H = (a + b + c + d) / 4;
+    let P = (H + s) / 2;
+    let Pr = roundToWhole(P);
+
+    result.textContent =
+        "Endnote: " + Pr + " Punkte (ungerundet: " + P.toFixed(1) + ")";
+}
+
+document.querySelectorAll("input").forEach(el =>
+    el.addEventListener("input", update)
+);
+</script>
+
+</body>
+</html>

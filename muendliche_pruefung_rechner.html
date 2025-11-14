@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Endnote mit zusätzlicher mündlicher Prüfung berechnen</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 700px;
+        margin: auto;
+        padding: 20px;
+        line-height: 1.7;
+        font-size: 17px;
+    }
+
+    h1, h2 {
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 24px;
+    }
+
+    .section {
+        background: #f1f3f4;
+        padding: 18px;
+        border-radius: 12px;
+        margin-top: 25px;
+    }
+
+    .label {
+        font-weight: bold;
+        margin-top: 15px;
+        display: block;
+    }
+
+    .value {
+        color: #1a73e8;
+        font-weight: bold;
+        margin-left: 5px;
+    }
+
+    input[type=range] {
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        height: 30px;
+    }
+
+    #result {
+        background: #ffe8cc;
+        padding: 18px;
+        border-radius: 12px;
+        margin-top: 25px;
+        font-size: 1.4em;
+        font-weight: bold;
+        text-align: center;
+        color: #d35400;
+    }
+
+    .note-box {
+        background: #fff3cd;
+        padding: 14px;
+        border-radius: 10px;
+        border-left: 5px solid #ffca2c;
+        margin-bottom: 20px;
+        font-weight: bold;
+        font-size: 17px;
+    }
+
+    a {
+        color: #1a73e8;
+    }
+</style>
+</head>
+
+<body>
+
+<a href="index.html">← Zurück zur Hauptseite</a>
+
+<h1>Endnote mit zusätzlicher mündlicher Prüfung</h1>
+
+<div class="note-box">
+    Bitte geben Sie <strong>Notenpunkte (0–15)</strong> ein – <u>keine Schulnoten 1–6</u>.
+</div>
+
+<p>
+Wenn Sie zusätzlich zur schriftlichen Prüfung eine <strong>mündliche Prüfung</strong> ablegen, wird Ihre Endnote neu berechnet.  
+Ihr Halbjahresdurchschnitt entsteht automatisch aus den vier Halbjahresnoten.
+</p>
+
+<div class="section">
+    <p style="text-align:center;font-weight:bold;">
+        Endnote = (2× Halbjahresdurchschnitt + 2× schriftliche Prüfung + mündliche Prüfung) ÷ 5
+    </p>
+
+    <p style="text-align:center;font-style:italic;">
+        (Offizielle Formel: <strong>P = (2H + 2S + M) : 5</strong>)
+    </p>
+</div>
+
+<h2>➤ Halbjahresnoten eingeben</h2>
+
+<div class="section">
+
+    <label class="label">11. Klasse – 1. Halbjahr: <span id="h11_1_val" class="value">0</span></label>
+    <input id="h11_1" type="range" min="0" max="15" value="0" step="1">
+
+    <label class="label">11. Klasse – 2. Halbjahr: <span id="h11_2_val" class="value">0</span></label>
+    <input id="h11_2" type="range" min="0" max="15" value="0" step="1">
+
+    <label class="label">12. Klasse – 1. Halbjahr: <span id="h12_1_val" class="value">0</span></label>
+    <input id="h12_1" type="range" min="0" max="15" value="0" step="1">
+
+    <label class="label">12. Klasse – 2. Halbjahr: <span id="h12_2_val" class="value">0</span></label>
+    <input id="h12_2" type="range" min="0" max="15" value="0" step="1">
+
+</div>
+
+<h2>➤ Prüfungsnoten eingeben</h2>
+
+<div class="section">
+    <label class="label">Schriftliche Prüfung (S): <span id="s_val" class="value">0</span></label>
+    <input id="s" type="range" min="0" max="15" value="0" step="1">
+
+    <label class="label">Mündliche Prüfung (M): <span id="m_val" class="value">0</span></label>
+    <input id="m" type="range" min="0" max="15" value="0" step="1">
+</div>
+
+<div id="result">Endnote: 0 Punkte (ungerundet: 0.0)</div>
+
+<script>
+// Elemente referenzieren
+const h11_1_el = document.getElementById("h11_1");
+const h11_2_el = document.getElementById("h11_2");
+const h12_1_el = document.getElementById("h12_1");
+const h12_2_el = document.getElementById("h12_2");
+const s_el     = document.getElementById("s");
+const m_el     = document.getElementById("m");
+
+function update() {
+    // Werte auslesen
+    const h11_1 = parseInt(h11_1_el.value);
+    const h11_2 = parseInt(h11_2_el.value);
+    const h12_1 = parseInt(h12_1_el.value);
+    const h12_2 = parseInt(h12_2_el.value);
+
+    // Anzeige aktualisieren
+    h11_1_val.textContent = h11_1;
+    h11_2_val.textContent = h11_2;
+    h12_1_val.textContent = h12_1;
+    h12_2_val.textContent = h12_2;
+
+    // Halbjahresdurchschnitt
+    const H = (h11_1 + h11_2 + h12_1 + h12_2) / 4;
+
+    const S = parseInt(s_el.value);
+    const M = parseInt(m_el.value);
+
+    s_val.textContent = S;
+    m_val.textContent = M;
+
+    const P = (2*H + 2*S + M) / 5;
+    const P_r = Math.round(P);
+
+    result.textContent =
+        "Endnote: " + P_r + " Punkte (ungerundet: " + P.toFixed(1) + ")";
+}
+
+// Event Listener setzen
+[h11_1_el, h11_2_el, h12_1_el, h12_2_el, s_el, m_el]
+  .forEach(el => el.addEventListener("input", update));
+
+// Startberechnung
+update();
+</script>
+
+</body>
+</html>
