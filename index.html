@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Notenrechner – Abschlussnote</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 500px;
+        margin: auto;
+    }
+    h1 {
+        text-align: center;
+    }
+    .container {
+        margin-bottom: 25px;
+    }
+    input[type=range] {
+        width: 100%;
+    }
+    .value {
+        font-weight: bold;
+        color: #1a73e8;
+    }
+    .result {
+        background: #f1f3f4;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 1.3em;
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+
+<h1>Notenrechner</h1>
+<p>Gib für jedes Halbjahr die Notenpunkte (0–15) ein. Die abschließende Note berechnet sich im Verhältnis 1:1 aus dem Durchschnitt der Halbjahresnoten und der Abschlussprüfung.</p>
+
+<div class="container">
+    <label>11. Klasse – 1. Halbjahr: <span class="value" id="v1">0</span></label>
+    <input type="range" min="0" max="15" value="0" id="n1">
+</div>
+
+<div class="container">
+    <label>11. Klasse – 2. Halbjahr: <span class="value" id="v2">0</span></label>
+    <input type="range" min="0" max="15" value="0" id="n2">
+</div>
+
+<div class="container">
+    <label>12. Klasse – 1. Halbjahr: <span class="value" id="v3">0</span></label>
+    <input type="range" min="0" max="15" value="0" id="n3">
+</div>
+
+<div class="container">
+    <label>12. Klasse – 2. Halbjahr: <span class="value" id="v4">0</span></label>
+    <input type="range" min="0" max="15" value="0" id="n4">
+</div>
+
+<div class="container">
+    <label>Abschlussprüfung: <span class="value" id="v5">0</span></label>
+    <input type="range" min="0" max="15" value="0" id="n5">
+</div>
+
+<div class="result" id="result">Abschließende Note: 0.0</div>
+
+<script>
+function update() {
+    let n1 = Number(document.getElementById("n1").value);
+    let n2 = Number(document.getElementById("n2").value);
+    let n3 = Number(document.getElementById("n3").value);
+    let n4 = Number(document.getElementById("n4").value);
+    let n5 = Number(document.getElementById("n5").value);
+
+    document.getElementById("v1").innerText = n1;
+    document.getElementById("v2").innerText = n2;
+    document.getElementById("v3").innerText = n3;
+    document.getElementById("v4").innerText = n4;
+    document.getElementById("v5").innerText = n5;
+
+    let hj = (n1 + n2 + n3 + n4) / 4;
+    let endnote = (hj + n5) / 2;
+
+    document.getElementById("result").innerText =
+        "Abschließende Note: " + endnote.toFixed(1);
+}
+
+document.querySelectorAll("input").forEach(el => {
+    el.addEventListener("input", update);
+});
+</script>
+
+</body>
+</html>
