@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Halbjahresnote berechnen</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 700px;
+        margin: auto;
+        padding: 20px;
+        line-height: 1.7;
+        font-size: 17px;
+    }
+
+    h1, h2 {
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 24px;
+    }
+
+    .section {
+        background: #eef2f7;
+        padding: 18px;
+        border-radius: 12px;
+        margin-top: 25px;
+    }
+
+    .label {
+        font-weight: bold;
+        margin-top: 15px;
+        display: block;
+    }
+
+    .value {
+        color: #1a73e8;
+        font-weight: bold;
+        margin-left: 5px;
+    }
+
+    input[type=range] {
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        height: 30px;
+    }
+
+    #result_box, #result2_box {
+        padding: 18px;
+        border-radius: 12px;
+        margin-top: 25px;
+        font-size: 1.3em;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    #result_box {
+        background: #e2f0ff;
+        color: #0b4da3;
+        border: 2px solid #bcd8fa;
+    }
+
+    #result2_box {
+        background: #ffd9cc;
+        color: #c0392b;
+        border: 2px solid #ffb3a1;
+        font-size: 1.4em;
+    }
+
+    .warning-box {
+        background: #fff4d7;
+        padding: 14px;
+        border-radius: 10px;
+        border-left: 6px solid #ffb84d;
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
+
+    .note-box {
+        background: #fff7cc;
+        padding: 14px;
+        border-radius: 10px;
+        border-left: 5px solid #ffd633;
+        margin-bottom: 20px;
+        font-weight: bold;
+        font-size: 17px;
+    }
+
+    .small-result-strong {
+        background: #d7ecff;
+        padding: 14px;
+        border-radius: 10px;
+        margin-top: 20px;
+        border-left: 6px solid #1a73e8;
+        font-weight: bold;
+        font-size: 1.2em;
+        color: #0b3970;
+    }
+
+    .ung {
+        display: block;
+        font-size: 0.75em;
+        color: #777;
+        margin-top: 4px;
+        font-weight: normal;
+    }
+
+    details {
+        margin-top: 30px;
+        background: #eef2f7;
+        padding: 18px;
+        border-radius: 12px;
+    }
+
+    summary {
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 18px;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>Halbjahresnote berechnen</h1>
+
+<div class="warning-box">
+    Dieses Werkzeug dient nur Ihrer Orientierung und stellt <strong>keine Garantie</strong> 
+    für die tatsächliche Halbjahresnote dar.  
+    Unterschiedliche Lehrkräfte können unterschiedlich gewichten, und es besteht immer ein 
+    <strong>pädagogischer Spielraum</strong>.
+</div>
+
+<div class="note-box">
+    Bitte nutzen Sie <strong>Notenpunkte (0–15)</strong> – keine Schulnoten 1–6.
+</div>
+
+<h2>➤ Eingaben</h2>
+
+<div class="section">
+
+    <label class="label">AT – Fachwissen (z. B. Tests): <span id="fw_val" class="value">0</span></label>
+    <input id="fw" type="range" min="0" max="15" value="0" step="1">
+
+    <label class="label">AT – andere Kriterien: <span id="ak_val" class="value">0</span></label>
+    <input id="ak" type="range" min="0" max="15" value="0" step="1">
+
+    <label class="label">Klausuren (Durchschnitt mit Dezimalstellen): 
+        <span id="kl_val" class="value">0.0</span></label>
+    <input id="kl" type="range" min="0" max="15" value="0" step="0.1">
+
+    <label class="label">Anzahl Klausuren im Halbjahr:</label>
+    <select id="kla_anz" style="padding:6px; border-radius:8px; font-size:16px;">
+        <option value="2" selected>2 Klausuren (Standard)</option>
+        <option value="1">1 Klausur</option>
+    </select>
+</div>
+
+<div id="result_box">
+    Geschätzte Halbjahresnote (ohne Fehlzeiten): <span id="result_r">0</span> Punkte
+    <span id="result_ung" class="ung">(ungerundet: 0.0)</span>
+</div>
+
+<hr style="margin-top:35px; margin-bottom:35px;">
+
+<h2>➤ Einfluss unentschuldigter Fehlzeiten</h2>
+
+<div class="section">
+    <p>Unentschuldigte Fehlstunden werden grundsätzlich mit <strong>0 Punkten</strong> bewertet.</p>
+
+    <label class="label">
+        Unentschuldigte Fehlzeiten (%): <span id="fehl_val" class="value">0%</span>
+    </label>
+    <input id="fehl" type="range" min="0" max="100" value="0" step="1">
+
+    <div id="at_neu_box" class="small-result-strong">
+        AT (neu, gesamt): 0 Punkte
+    </div>
+</div>
+
+<div id="result2_box">
+    Neue Halbjahresnote (mit Fehlzeiten): <span id="result2_r">0</span> Punkte
+    <span id="result2_ung" class="ung">(ungerundet: 0.0)</span>
+</div>
+
+<script>
+function update() {
+    const fw = parseInt(fw_val.innerText = document.getElementById("fw").value);
+    const ak = parseInt(ak_val.innerText = document.getElementById("ak").value);
+    const kl_raw = parseFloat(document.getElementById("kl").value);
+    kl_val.innerText = kl_raw.toFixed(1);
+    const kl = kl_raw;
+
+    const anz = parseInt(document.getElementById("kla_anz").value);
+    const fehl = parseInt(document.getElementById("fehl").value);
+    fehl_val.innerText = fehl + "%";
+
+    // AT ohne Fehlzeiten
+    const AT = (fw + ak) / 2;
+
+    // Halbjahresnote ohne Fehlzeiten
+    let halbjahr;
+    if (anz === 2) halbjahr = (AT + kl) / 2;
+    else halbjahr = (2 * AT + kl) / 3;
+
+    const halbjahr_r = Math.round(halbjahr);
+
+    document.getElementById("result_r").innerText = halbjahr_r;
+    document.getElementById("result_ung").innerText = "(ungerundet: " + halbjahr.toFixed(1) + ")";
+
+    // Werte MIT Fehlzeiten
+    const ak_neu = ak * ((100 - fehl) / 100);
+    const AT_neu = (fw + ak_neu) / 2;
+    const AT_neu_r = Math.round(AT_neu);
+
+    document.getElementById("at_neu_box").innerText =
+        "AT (neu, gesamt): " + AT_neu_r + " Punkte";
+
+    let halbjahr2;
+    if (anz === 2) halbjahr2 = (AT_neu + kl) / 2;
+    else halbjahr2 = (2 * AT_neu + kl) / 3;
+
+    const halbjahr2_r = Math.round(halbjahr2);
+
+    document.getElementById("result2_r").innerText = halbjahr2_r;
+    document.getElementById("result2_ung").innerText = "(ungerundet: " + halbjahr2.toFixed(1) + ")";
+}
+
+["fw","ak","kl","kla_anz","fehl"].forEach(id =>
+    document.getElementById(id).addEventListener("input", update)
+);
+
+update();
+</script>
+
+<h2 style="margin-top:40px; text-align:center;">Wie werden die Werte berechnet?</h2>
+
+<div class="section" style="background:#f4f7fa;">
+    <p>
+        Damit Sie nachvollziehen können, wie die Berechnung funktioniert, finden Sie hier eine
+        verständliche Erklärung anhand zweier Beispiele. Die Erklärungen haben keinen Einfluss
+        auf die Werte oben – sie dienen nur Ihrer Orientierung.
+    </p>
+
+    <h3>1. Schritt: AT – Fachwissen und AT – andere Kriterien</h3>
+    <p>
+        Angenommen, Sie erreichen im Fachwissen (z.&nbsp;B. Tests) <strong>12 Punkte</strong>
+        und bei den anderen Kriterien <strong>10 Punkte</strong>.  
+        Beide zählen zu gleichen Teilen. Daher bildet man einen Durchschnitt:
+    </p>
+    <p>
+        <strong>AT gesamt = (12 + 10) ÷ 2 = 11 Punkte</strong>
+    </p>
+
+    <h3>2. Schritt: Halbjahresnote ohne Fehlzeiten</h3>
+    <p>
+        Beispiel: Ihr Klausurdurchschnitt liegt bei <strong>9,5 Punkten</strong> und Sie schreiben
+        zwei Klausuren im Halbjahr. Dann zählen AT und Klausuren je zur Hälfte.
+    </p>
+    <p>
+        <strong>Halbjahresnote = (AT 11 + Klausuren 9,5) ÷ 2 = 10,25 Punkte</strong>  
+        ⇒ Gerundet: <strong>10 Punkte</strong>.
+    </p>
+
+    <h3>3. Schritt: Einfluss unentschuldigter Fehlzeiten</h3>
+    <p>
+        Unentschuldigte Fehlstunden gelten als nicht erbrachte Leistung.  
+        Daher wird nur der Wert „AT – andere Kriterien“ entsprechend reduziert.
+    </p>
+
+    <p><strong>Beispiel A – wenige Fehlzeiten (10 %):</strong></p>
+    <p>
+        10 Punkte × 0,90 = <strong>9 Punkte</strong>  
+        ⇒ Neuer AT-Wert: (12 + 9) ÷ 2 = <strong>10,5 Punkte</strong>  
+        ⇒ Gerundet: <strong>11 Punkte</strong>
+    </p>
+
+    <p><strong>Beispiel B – viele Fehlzeiten (40 %):</strong></p>
+    <p>
+        10 Punkte × 0,60 = <strong>6 Punkte</strong>  
+        ⇒ Neuer AT-Wert: (12 + 6) ÷ 2 = <strong>9 Punkte</strong>  
+        ⇒ Gerundet: <strong>9 Punkte</strong>
+    </p>
+
+    <h3>4. Schritt: Halbjahresnote mit Fehlzeiten</h3>
+
+    <p><strong>Beispiel A – 10 % Fehlzeiten:</strong></p>
+    <p>
+        Halbjahresnote neu = (10,5 + 9,5) ÷ 2 = <strong>10,0 Punkte</strong>  
+        → Die Note verändert sich kaum.
+    </p>
+
+    <p><strong>Beispiel B – 40 % Fehlzeiten:</strong></p>
+    <p>
+        Halbjahresnote neu = (9 + 9,5) ÷ 2 = <strong>9,25 Punkte</strong>  
+        ⇒ Gerundet: <strong>9 Punkte</strong>
+    </p>
+    <p>
+        → Hier führt die hohe Fehlzeitenquote zu einer merklich schlechteren Halbjahresnote.
+    </p>
+</div>
+
+
+</body>
+</html>
